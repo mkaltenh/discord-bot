@@ -1,5 +1,4 @@
-<!-- ![git logo](./res/logo_git.png "Chutulut Bot") -->
-<img src="./res/logo_git.png" alt="Chutulu Bot" style="float: left; height: 4em; width: auto; margin-right: 10px;"  title="Chutulu Bot" width="100" height="100"/>
+![git logo](./res/logo_git.png){:height="4em" width="auto" float:left}
 
 # Chutulu Bot
 >Does a whole bunch of things... if you are brave enough.
