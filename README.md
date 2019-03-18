@@ -15,7 +15,7 @@ The following APIs are currently implemented in this discord Bot
 ## UI Example
 
 Uses the basic Discord Chat to display results:
-![ui example](./res/tmdb.PNMG "UI Example TMDB request")
+![ui example](./res/tmdb.PNG "UI Example TMDB request")
 
 ## Deploy
 
