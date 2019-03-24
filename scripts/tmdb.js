@@ -41,6 +41,7 @@ var methods = {
         list = [];
 
       for (item in data.results){
+        console.log(data.results[item])
         list.push({"name":data.results[item].name, "genre":data.results[item].genre_ids});
       }
       list = list.slice(0,10);

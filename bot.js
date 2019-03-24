@@ -1,10 +1,12 @@
 const Discord = require('discord.js');
-const tmdb = require('./tmdb.js');
-const fbdb = require('./fbdb.js');
+const tmdb = require('./scripts/tmdb.js');
+const fbdb = require('./scripts/fbdb.js');
 const ytdl = require('ytdl-core');
 const client = new Discord.Client();
-var auth = require('./auth.json');
-var tmdb_logo ="https://www.themoviedb.org/static_cache/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png"
+var auth = require('./data/auth.json');
+const attachment = new Discord.Attachment('./img/tmdb.png', 'tmdb.png');
+const tmdb_logo ="./img/favicon.jpg"
+const fs = require('fs')
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -17,24 +19,30 @@ client.on('message', msg => {
     msg.reply('pong');
     msg.reply(message[1]);
   }
-  if (message[0] === '/about'){
-    msg.reply('Bob der Baumeister Version 0.1');
+  if (message[0] === '/version'){
+    msg.reply('Version 0.1');
   }
   if (message[0] === '/help'){
     msg.reply('Bob der Baumeister Help');
   }
   if(message[0] === '/tv' && message[1]){
-    data = tmdb.searchTvShow(message[1]);
-    imdb = "https://www.imdb.com/title/" + tmdb.getExternalIdTv(data.results[0].id).imdb_id;
-    poster = 'https://image.tmdb.org/t/p/w260_and_h390_bestv2' + data.results[0].poster_path;
-    popularity = parseFloat(parseFloat(data.results[0].popularity).toFixed(2))
-    const embed = new Discord.RichEmbed()
-      .setAuthor(data.results[0].name,"",imdb)
-      .setColor(6236315)
-      .setDescription(data.results[0].overview)
-      .setFooter("Votes " + data.results[0].vote_count + " Score " + data.results[0].vote_average + " Popularity " + popularity, tmdb_logo)
-      .setThumbnail(poster)
-    msg.reply({embed});
+    try{
+      data = tmdb.searchTvShow(message[1]);
+      imdb = "https://www.imdb.com/title/" + tmdb.getExternalIdTv(data.results[0].id).imdb_id;
+      poster = 'https://image.tmdb.org/t/p/w260_and_h390_bestv2' + data.results[0].poster_path;
+      popularity = parseFloat(parseFloat(data.results[0].popularity).toFixed(2))
+      const embed = new Discord.RichEmbed()
+        .setAuthor(data.results[0].name,"",imdb)
+        .setColor(6236315)
+        .setDescription(data.results[0].overview)
+        .attachFile(attachment)
+        .setFooter("Votes " + data.results[0].vote_count + " Score " + data.results[0].vote_average + " Popularity " + popularity, 'attachment://tmdb.png')
+        .setThumbnail(poster)
+      msg.reply({embed});
+    }
+    catch(err){
+      console.error(err);
+    }
   }
   if (message[0] === '/tv/current' && message[1]){
     data = tmdb.searchTvShow(message[1]);
@@ -42,7 +50,6 @@ client.on('message', msg => {
     id = data.results[0].id;
     season = tmdb.getSeasonCount(id);
     episode = tmdb.getLatestEpisode(id, season);
-    console.log(episode);
     image = "https://image.tmdb.org/t/p/original" + episode.still_path;
     const embed = new Discord.RichEmbed()
       .setTitle("S" + episode.season_number + "E" + episode.episode_number + " - " + episode.name)
@@ -93,9 +100,29 @@ client.on('message', msg => {
       msg.member.voiceChannel.leave();
     }
   }
-  if(message[0] === '/sport') {
-    console.log('loading');
-    console.log(fbdb.getLeagueTable('buli'));
+  if(message[0] === '/cl/group') {
+    groupId = message[1].toUpperCase()
+    res = fbdb.getLeagueTable('cl')
+    table = []
+
+    for(item in res.standings){
+      if (res.standings[item].group == "GROUP_" + groupId && res.standings[item].type == "TOTAL"){
+        table = res.standings[item].table
+      }
+    }
+    console.log(table)
+    img = fbdb.buildTable(table)
+    fs.writeFile('./temp/table.png', img, 'base64', (err) => {
+      if (err) throw err;
+      const att = new Discord.Attachment('./temp/table.png', 'table.png');
+      const embed = new Discord.RichEmbed()
+        .setTitle("Champions League - Group " + groupId)
+        .setColor(51283)
+        .attachFile(att)
+        .setImage('attachment://table.png')
+        .setFooter("UEFA Champions League")
+      msg.reply({ embed });
+    });
   }
 });
 

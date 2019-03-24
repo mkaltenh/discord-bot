@@ -8,6 +8,8 @@
   },
   "author": "Max Kaha",
   "dependencies": {
+    "atob": "^2.1.2",
+    "canvas": "^2.4.1",
     "discord.js": "^11.3.2",
     "ffmpeg-binaries": "^3.2.2-3",
     "libsodium-wrappers": "^0.7.3",

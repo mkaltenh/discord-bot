@@ -1,0 +1,1 @@
+place your discord API key alongside other API Keys in this directory

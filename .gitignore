@@ -62,3 +62,7 @@ typings/
 
 # ressources
 sounds/
+tmdb.svg
+README.html
+package-lock.json
+data/*.json
