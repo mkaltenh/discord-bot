@@ -1,7 +1,6 @@
-<!-- ![git logo](./res/logo_git.png "Chutulut Bot") -->
-<img src="./res/logo_git.png" alt="Chutulu Bot" title="Chutulu Bot" width="5em" height="auto"/>
-
 # Chutulu Bot
+<img src="./res/logo_git.png" alt="Chutulu Bot" title="Chutulu Bot" width="100px" height="100px"/>
+
 >Does a whole bunch of things... if you are brave enough.
 
 ## API Implementation
