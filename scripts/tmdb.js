@@ -1,17 +1,17 @@
-var methods = {};
+let methods = {};
 
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest,
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest,
   tmdb = "https://api.themoviedb.org/3/",
   apiKey = "?api_key=e7c7bd78717187a5820b6d90edeab432";
 
 function httpGet(theUrl){
-    var xmlHttp = new XMLHttpRequest();
+    const xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
     return xmlHttp.responseText;
 }
 
-var methods = {
+methods = {
     searchTvShow: function(query, lang, page){
       var myQuery = encodeURIComponent(query.trim()),
         lang = lang || "en-US",
@@ -22,12 +22,12 @@ var methods = {
     },
 
     getSeasonCount: function(id, lang){
-      var lang = lang || "en-US",
+      let lang = lang || "en-US",
         requestUrl = tmdb + "tv/" + String(id) + apiKey + "&language=" + lang,
         data = JSON.parse(httpGet(requestUrl)).seasons,
         latestSeason = 0;
 
-      for(item in data){
+      for(let item in data){
         if (data[item].season_number > latestSeason) {
           latestSeason = data[item].season_number;
         }
@@ -36,11 +36,11 @@ var methods = {
     },
 
     getPopularShows: function(){
-      var request = tmdb + "tv/popular" + apiKey + "&language=en-US&page=1",
+      let request = tmdb + "tv/popular" + apiKey + "&language=en-US&page=1",
         data = JSON.parse(httpGet(request)),
         list = [];
 
-      for (item in data.results){
+      for (let item in data.results){
         console.log(data.results[item])
         list.push({"name":data.results[item].name, "genre":data.results[item].genre_ids});
       }
@@ -52,13 +52,13 @@ var methods = {
     getLatestEpisode: function(id, latest_season){
       // var show = searchTvShow(show_name).results[0].id,
       //   season = getSeasonCount(show),
-      var request = tmdb + "tv/" + id + "/season/" + latest_season + apiKey,
+      let request = tmdb + "tv/" + id + "/season/" + latest_season + apiKey,
         date = new Date(),
-        episode;
+        episode,
         data = JSON.parse(httpGet(request)).episodes;
 
-      for(item in data){
-        var air_date = new Date(data[item].air_date);
+      for(let item in data){
+        let air_date = new Date(data[item].air_date);
         if((date - air_date) < 0){
           break;
         }
@@ -70,7 +70,7 @@ var methods = {
     },
 
     getExternalIdTv: function(id){
-      var request = tmdb + "tv/" + id + "/external_ids" + apiKey + "&language=en-US";
+      let request = tmdb + "tv/" + id + "/external_ids" + apiKey + "&language=en-US";
       return JSON.parse(httpGet(request));
     }
 };
