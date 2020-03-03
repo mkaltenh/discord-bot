@@ -8,19 +8,27 @@ const attachment = new Discord.Attachment('./img/tmdb.png', 'tmdb.png');
 const tmdb_logo ="./img/favicon.jpg";
 const fs = require('fs');
 
+// On Ready function at startup of Bot
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
+// On Message functions triggered by user
 client.on('message', msg => {
-    //message = msg.content.split(" ");
+    /**
+     * Basic Commands
+     */
     let message = msg.content.split(/ (.*)/);
     if (message[0] === '/ping') {
         msg.reply('pong');
         msg.reply(message[1]);
     }
     if (message[0] === '/version') msg.reply('Version 0.1');
-    if (message[0] === '/help') msg.reply('Bob der Baumeister Help');
+    if (message[0] === '/help') msg.reply('Chutulu Bot Help');
+
+    /**
+     * TV Show Information pulled from TMDB
+     */
     if(message[0] === '/tv' && message[1]){
         try{
             let data = tmdb.searchTvShow(message[1]);
@@ -67,6 +75,11 @@ client.on('message', msg => {
         }
         msg.reply({embed});
     }
+    /**
+     * Handle Audio playback
+     * 
+     * @param message Audio to play (either file or youtube link)
+     */
     if (message[0] === '/play' && message[1]) {
         if (!msg.guild) return;
         // Only try to join the sender's voice channel if they are in one themselves
@@ -96,6 +109,10 @@ client.on('message', msg => {
             msg.member.voiceChannel.leave();
         }
     }
+
+    /**
+     * Display Champions League Information from FBDB
+     */
     if(message[0] === '/cl/group') {
         let groupId = message[1].toUpperCase()
         let res = fbdb.getLeagueTable('cl')

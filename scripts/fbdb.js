@@ -14,6 +14,7 @@ function httpGet(theUrl){
 }
 
 var methods = {
+  // Get all available competitions
   getAllCompetitions: function(){
     var request = fbdb + 'v2/competitions',
       data = JSON.parse(httpGet(request)),
@@ -26,6 +27,7 @@ var methods = {
     return comp_list;
   },
 
+  // Get current standings
   getLeagueTable: function(shortname){
     var name = competitions[shortname].name,
       //id = competitions[shortname].id,
@@ -35,6 +37,7 @@ var methods = {
     return data;
   },
 
+  // Build an image of the current standings to display in chatbox
   buildTable: function(data){
     const { createCanvas, loadImage } = require('canvas')
     const canvas = createCanvas(200, 200)

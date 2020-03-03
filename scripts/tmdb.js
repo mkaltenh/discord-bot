@@ -12,6 +12,7 @@ function httpGet(theUrl){
 }
 
 methods = {
+    // Get information about TV show from search query
     searchTvShow: function(query, lang, page){
       var myQuery = encodeURIComponent(query.trim()),
         lang = lang || "en-US",
@@ -21,6 +22,7 @@ methods = {
       return JSON.parse(httpGet(request));
     },
 
+    // Return amount of seasons
     getSeasonCount: function(id, lang){
       let lang = lang || "en-US",
         requestUrl = tmdb + "tv/" + String(id) + apiKey + "&language=" + lang,
@@ -35,6 +37,7 @@ methods = {
       return latestSeason;
     },
 
+    // Get trending TV Shows
     getPopularShows: function(){
       let request = tmdb + "tv/popular" + apiKey + "&language=en-US&page=1",
         data = JSON.parse(httpGet(request)),
@@ -49,9 +52,8 @@ methods = {
       return list
     },
 
+    // Return latest episode description
     getLatestEpisode: function(id, latest_season){
-      // var show = searchTvShow(show_name).results[0].id,
-      //   season = getSeasonCount(show),
       let request = tmdb + "tv/" + id + "/season/" + latest_season + apiKey,
         date = new Date(),
         episode,
@@ -69,6 +71,7 @@ methods = {
       return episode;
     },
 
+    // Get Link to TMDB
     getExternalIdTv: function(id){
       let request = tmdb + "tv/" + id + "/external_ids" + apiKey + "&language=en-US";
       return JSON.parse(httpGet(request));
@@ -76,6 +79,10 @@ methods = {
 };
 
 module.exports = methods;
+
+/**
+ * Example Usage
+ */
 // data = searchTvShow("Mr. Robot");
 // console.log("tv_show_id", data.results[0].id);
 // console.log("latest_season", getSeasonCount(data.results[0].id));
